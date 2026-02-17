@@ -23,28 +23,14 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- Session State & Callbacks ---
-if 'dark_mode' not in st.session_state:
-    st.session_state.dark_mode = True  # Default to dark mode as per user preference? Or False.
-
-def toggle_dark_mode():
-    st.session_state.dark_mode = not st.session_state.dark_mode
-
-# --- Dynamic Colors ---
-if st.session_state.dark_mode:
-    text_main_color = "#ffffff"
-    text_sub_color = "#e2e8f0"
-    card_bg_color = "#1e293b"
-    card_border_color = "#334155"
-    sidebar_bg_color = "#0f172a"
-    sidebar_text_color = "#ffffff"
-else:
-    text_main_color = "#1a202c"
-    text_sub_color = "#4a5568"
-    card_bg_color = "#ffffff"
-    card_border_color = "#cbd5e0"
-    sidebar_bg_color = "#f7fafc"
-    sidebar_text_color = "#1a202c"
+# --- Fixed Color Scheme: Light Blue and Dark Blue ---
+text_main_color = "#0a3d91"  # Dark blue for main text
+text_sub_color = "#1565c0"  # Medium blue for secondary text
+card_bg_color = "#e3f2fd"  # Light blue for card backgrounds
+card_border_color = "#90caf9"  # Medium light blue for borders
+sidebar_bg_color = "#bbdefb"  # Light blue for sidebar
+sidebar_text_color = "#0d47a1"  # Dark blue for sidebar text
+accent_color = "#1976d2"  # Bright blue for accents
 
 # --- Custom CSS ---
 custom_css = f"""
@@ -62,7 +48,7 @@ custom_css = f"""
     /* Global Text Visibility */
     body, .stApp {{
         color: {text_main_color} !important;
-        background-color: {'#0f172a' if st.session_state.dark_mode else '#f1f5f9'} !important;
+        background-color: #f5f9ff !important;
     }}
     
     h1, h2, h3, h4, h5, h6, p, li, span, div, label, td, th, caption, .caption {{
@@ -84,18 +70,14 @@ custom_css = f"""
     }}
     
     [data-testid="stSidebar"] a {{
-        color: #3b82f6 !important;
+        color: #1565c0 !important;
     }}
 
-    /* Sticky Mode Toggle Button */
-    /* Target the container of the toggle button specifically */
+    /* Button Styling */
     div.stButton > button:first-child {{
         border-radius: 9999px;
         font-weight: bold;
     }}
-    
-    /* We assume the toggle is the first button in the main area or we target it by key in a specific block */
-    /* Since we can't easily target by key in CSS, we'll rely on placement */
 
     /* Tabs */
     .stTabs [data-baseweb="tab-list"] {{
@@ -130,8 +112,8 @@ custom_css = f"""
     
     /* Browse Button Styling */
     [data-testid="stFileUploader"] button {{
-        background-color: {('#334155' if st.session_state.dark_mode else '#e2e8f0')} !important;
-        color: {text_main_color} !important;
+        background-color: {accent_color} !important;
+        color: white !important;
         border: none !important;
         padding: 0.5rem 1rem;
         border-radius: 6px;
@@ -139,8 +121,8 @@ custom_css = f"""
     }}
     
     [data-testid="stFileUploader"] button:hover {{
-        background-color: {('#475569' if st.session_state.dark_mode else '#cbd5e0')} !important;
-        color: {text_main_color} !important;
+        background-color: #1565c0 !important;
+        color: white !important;
         box-shadow: none !important;
         transform: none !important;
     }}
@@ -181,61 +163,9 @@ custom_css = f"""
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-# --- Layout: Header + Sticky Button ---
-# To make a button truly interaction-safe and sticky, we place it in a container
-# but standard CSS stickiness is best applied to a specific known container.
-# Here we use a 'float' approach for visual stickiness.
-st.markdown(f"""
-    <style>
-    div.element-container:has(button#dark_mode_toggle) {{
-        position: fixed;
-        top: 25px;
-        right: 25px;
-        z-index: 999999;
-    }}
-    </style>
-""", unsafe_allow_html=True)
-
-# We use an empty container to inject the button, relying on the 'key' (id) for positioning if possible?
-# Streamlit generates ids like 'bui-2'. Reliable styling requires placement.
-# We will place it in col2 of the header, and style that column to be fixed.
-
-col_header_1, col_header_2 = st.columns([6, 1])
-
-with col_header_1:
-    st.title("💸 Personal Finance Analyzer")
-    st.markdown("Smart insights with auto-categorization and anomaly detection.")
-
-with col_header_2:
-    # Sticky Toggle Button
-    # We apply a wrapper div to target it easier if needed, or just use the layout trick.
-    # The 'key' helps preserve state but not CSS target directly in basic Streamlit.
-    # We use the previous CSS rule: [data-testid="column"]:nth-child(2) .stButton
-    st.markdown(f"""
-    <style>
-    [data-testid="stHorizontalBlock"] [data-testid="column"]:nth-of-type(2) .stButton {{
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 999999;
-        width: auto;
-    }}
-    [data-testid="stHorizontalBlock"] [data-testid="column"]:nth-of-type(2) .stButton button {{
-        background-color: {'#3b82f6' if st.session_state.dark_mode else '#2563eb'} !important;
-        color: white !important;
-        border: none;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }}
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Callback-based toggle (no st.rerun needed, but good practice to allow standard flow)
-    st.button(
-        "🌙 Dark" if not st.session_state.dark_mode else "☀️ Light", 
-        on_click=toggle_dark_mode,
-        key="btn_toggle_mode",
-        use_container_width=False
-    )
+# --- Layout: Header ---
+st.title("💸 Personal Finance Analyzer")
+st.markdown("Smart insights with auto-categorization and anomaly detection.")
 
 # --- Sidebar ---
 with st.sidebar:
@@ -361,21 +291,21 @@ try:
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 1.5rem; border-radius: 12px; color: white; text-align: center;'>
+            <div style='background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%); padding: 1.5rem; border-radius: 12px; color: white; text-align: center;'>
                 <div style='font-size: 0.9rem; margin-bottom: 0.2rem;'>💰 Income</div>
                 <div style='font-size: 1.8rem; font-weight: 800;'>₦{net_flow['income']:,.0f}</div>
             </div>
         """, unsafe_allow_html=True)
     with m2:
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 1.5rem; border-radius: 12px; color: white; text-align: center;'>
+            <div style='background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%); padding: 1.5rem; border-radius: 12px; color: white; text-align: center;'>
                 <div style='font-size: 0.9rem; margin-bottom: 0.2rem;'>💸 Expenses</div>
                 <div style='font-size: 1.8rem; font-weight: 800;'>₦{net_flow['expenses']:,.0f}</div>
             </div>
         """, unsafe_allow_html=True)
     with m3:
         st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 1.5rem; border-radius: 12px; color: white; text-align: center;'>
+            <div style='background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%); padding: 1.5rem; border-radius: 12px; color: white; text-align: center;'>
                 <div style='font-size: 0.9rem; margin-bottom: 0.2rem;'>📊 Net Flow</div>
                 <div style='font-size: 1.8rem; font-weight: 800;'>₦{net_flow['net']:,.0f}</div>
                 <div style='font-size: 0.8rem;'>{net_flow['savings_rate']:.1f}% Savings</div>
@@ -383,7 +313,7 @@ try:
         """, unsafe_allow_html=True)
     with m4:
         acount = df['is_anomaly'].sum()
-        acolor = "#ef4444" if acount > 0 else "#10b981"
+        acolor = "#f57c00" if acount > 0 else "#1976d2"  # Orange for anomalies, blue for all good
         st.markdown(f"""
             <div style='background: {acolor}; padding: 1.5rem; border-radius: 12px; color: white; text-align: center;'>
                 <div style='font-size: 0.9rem; margin-bottom: 0.2rem;'>🚨 Anomalies</div>
@@ -442,9 +372,9 @@ try:
         # Enhanced Trends Chart
         fig = go.Figure()
         
-        # Colors based on mode
-        line_color = '#60a5fa' if st.session_state.dark_mode else '#2563eb' # Lighter blue in dark, Strong blue in light
-        marker_color = '#ffffff' if st.session_state.dark_mode else '#1e40af'
+        # Colors for the chart
+        line_color = '#1976d2'  # Bright blue
+        marker_color = '#0d47a1'  # Dark blue
         
         fig.add_trace(go.Scatter(
             x=m_stats.index.astype(str), 
@@ -490,7 +420,8 @@ try:
         st.plotly_chart(fig, use_container_width=True)
         
     with tabs[2]:
-        sub_df = df[df['category'] != 'Income']
+        sub_df = df[df['category'] != 'Income'].copy()
+        sub_df['amount'] = sub_df['amount'].abs()
         fig = px.pie(sub_df, values='amount', names='category', hole=0.4)
         fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', font_color=text_main_color)
         st.plotly_chart(fig, use_container_width=True)
@@ -535,13 +466,13 @@ try:
         
         # Determine Color & Status
         if percent >= 100:
-            status_color = "#ef4444"  # Red
+            status_color = "#f57c00"  # Orange
             status_msg = "⚠️ OVER BUDGET"
         elif percent >= 80:
-            status_color = "#f59e0b"  # Yellow/Orange
+            status_color = "#42a5f5"  # Light blue
             status_msg = "⚠️ Approaching Limit"
         else:
-            status_color = "#10b981"  # Green
+            status_color = "#1565c0"  # Dark blue
             status_msg = "✅ Within Budget"
             
         # Display Metrics
