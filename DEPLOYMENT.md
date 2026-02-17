@@ -42,7 +42,7 @@ You need to have your code in a GitHub repository.
 3.  **Select Repository**:
     *   **Repository**: Choose `YOUR_USERNAME/personal-finance-analyzer`.
     *   **Branch**: `main`.
-    *   **Main file path**: `app.py`.
+    *   **Main file path**: change `streamlit_app.py` to `app.py` (This is important!).
 4.  **Deploy**: Click **Deploy!**
 
 ## Step 3: Wait & Verify
