@@ -24,19 +24,17 @@ A powerful, intelligent personal finance dashboard that automatically categorize
 
 ## 📸 Screenshots
 
-### 🎨 Dashboard Overview
-*Your financial command center with a sleek blue aesthetic - where data meets design*
 
+### 📊 Command Center
+*Your financial heartbeat at a glance. Instant access to key metrics, quick actions, and a high-level summary of your financial health.*
 ![Dashboard Overview](screenshots/dashboard-overview.png)
 
-### 💎 Financial Overview
-*Real-time insights into your income, expenses, and net flow - all in stunning blue gradients*
-
+### 💰 Deep Dive Analysis
+*Uncover the stories behind the numbers. Visualize spending trends, spot anomalies, and understand exactly where your money is going.*
 ![Financial Overview](screenshots/financial-overview.png)
 
-### 🎯 Budget Tracker
-*Stay on top of your spending goals with intelligent budget monitoring and visual progress tracking*
-
+### 🎯 Budget Enforcer
+*Stay on track and never overspend again. Set targets, monitor real-time progress, and master your cash flow with precision.*
 ![Budget Tracker](screenshots/budget-tracker.png)
 
 
